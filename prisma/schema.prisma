@@ -14,17 +14,17 @@ model Job {
   experience      String
   job_location    String
   job_type        String
-  work_setting    String
-  salary          Int
-  date_posted     DateTime  @db.Date
-  h1Type          String
-  job_link        String
-  experience_level String
-  full_description String    @db.Text
-  job_category     String
+  work_setting    String?
+  salary          Int?
+  date_posted     DateTime? @db.Date
+  h1Type          String?
+  job_link        String?
+  experience_level String?
+  full_description String?   @db.Text
+  job_category    String?
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
-  applicants       User[]    @relation("JobApplications")
+  applicants      User[]    @relation("JobApplications")
   savers          User[]    @relation("SavedJobs")
 
   @@index([job_category])

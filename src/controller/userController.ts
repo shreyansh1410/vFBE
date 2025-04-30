@@ -29,7 +29,6 @@ export const signIn = async (req: Request, res: Response): Promise<any> => {
 };
 
 export const logout = async (req: Request, res: Response): Promise<any> => {
-  // For JWT, logout is handled on the client by deleting the token
   return res.status(200).json({ message: "Logged out" });
 };
 

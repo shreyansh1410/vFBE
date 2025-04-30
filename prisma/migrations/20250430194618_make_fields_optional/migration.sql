@@ -1,0 +1,9 @@
+-- AlterTable
+ALTER TABLE "Job" ALTER COLUMN "work_setting" DROP NOT NULL,
+ALTER COLUMN "salary" DROP NOT NULL,
+ALTER COLUMN "date_posted" DROP NOT NULL,
+ALTER COLUMN "h1Type" DROP NOT NULL,
+ALTER COLUMN "job_link" DROP NOT NULL,
+ALTER COLUMN "experience_level" DROP NOT NULL,
+ALTER COLUMN "full_description" DROP NOT NULL,
+ALTER COLUMN "job_category" DROP NOT NULL;
