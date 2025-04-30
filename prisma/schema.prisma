@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Job {
+  id              Int       @id @default(autoincrement())
+  company         String
+  job_title       String
+  experience      String
+  job_location    String
+  job_type        String
+  work_setting    String
+  salary          Int
+  date_posted     DateTime  @db.Date
+  h1Type          String
+  job_link        String
+  experience_level String
+  full_description String    @db.Text
+  job_category     String
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  applicants       User[]    @relation("JobApplications")
+  savers          User[]    @relation("SavedJobs")
+
+  @@index([job_category])
+  @@index([job_title])
+  @@index([company])
+}
+
+model User {
+  id              Int       @id @default(autoincrement())
+  clerkId         String    @unique // Clerk user ID
+  email           String    @unique
+  name            String
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  appliedJobs     Job[]     @relation("JobApplications")
+  savedJobs       Job[]     @relation("SavedJobs")
+
+  @@index([clerkId])
+  @@index([email])
+}
