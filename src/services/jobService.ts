@@ -1,5 +1,4 @@
 import { PrismaClient } from "@prisma/client";
-import * as userService from "./userService";
 
 const prisma = new PrismaClient();
 
@@ -68,23 +67,21 @@ export const getJobById = async (id: number) => {
   });
 };
 
-export const saveJob = async (clerkId: string, jobId: number) => {
+export const saveJob = async (userId: number, jobId: number) => {
   const job = await prisma.job.findUnique({ where: { id: jobId } });
   if (!job) return false;
-  await userService.ensureUserExists(clerkId);
   await prisma.user.update({
-    where: { clerkId },
+    where: { id: userId },
     data: { savedJobs: { connect: { id: jobId } } },
   });
   return true;
 };
 
-export const applyToJob = async (clerkId: string, jobId: number) => {
+export const applyToJob = async (userId: number, jobId: number) => {
   const job = await prisma.job.findUnique({ where: { id: jobId } });
   if (!job) return false;
-  await userService.ensureUserExists(clerkId);
   await prisma.user.update({
-    where: { clerkId },
+    where: { id: userId },
     data: { appliedJobs: { connect: { id: jobId } } },
   });
   return true;

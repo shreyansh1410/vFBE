@@ -80,9 +80,10 @@ const getJobById = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 });
 exports.getJobById = getJobById;
 const saveJob = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     try {
-        const clerkId = req.auth.userId;
-        const success = yield jobService.saveJob(clerkId, parseInt(req.params.id));
+        const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
+        const success = yield jobService.saveJob(userId, parseInt(req.params.id));
         if (!success)
             return res.status(404).json({ message: "Job not found" });
         return res.status(200).json({ message: "Job saved" });
@@ -93,9 +94,10 @@ const saveJob = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.saveJob = saveJob;
 const applyToJob = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     try {
-        const clerkId = req.auth.userId;
-        const success = yield jobService.applyToJob(clerkId, parseInt(req.params.id));
+        const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
+        const success = yield jobService.applyToJob(userId, parseInt(req.params.id));
         if (!success)
             return res.status(404).json({ message: "Job not found" });
         return res.status(200).json({ message: "Applied to job" });

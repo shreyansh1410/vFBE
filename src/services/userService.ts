@@ -1,27 +1,55 @@
 import { PrismaClient } from "@prisma/client";
-import { ClerkExpressWithAuth } from "@clerk/clerk-sdk-node";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 const prisma = new PrismaClient();
+const JWT_SECRET = process.env.JWT_SECRET || "changeme";
 
-export const ensureUserExists = async (clerkId: string) => {
-  let user = await prisma.user.findUnique({ where: { clerkId } });
-  if (!user) {
-    const clerkUser = { email: `user_${clerkId}@example.com`, name: "User" };
-    user = await prisma.user.create({
-      data: {
-        clerkId,
-        email: clerkUser.email,
-        name: clerkUser.name,
-      },
-    });
-  }
-  return user;
+export const createUser = async ({
+  name,
+  email,
+  password,
+}: {
+  name: string;
+  email: string;
+  password: string;
+}) => {
+  const existing = await prisma.user.findUnique({ where: { email } });
+  if (existing) throw new Error("Email already in use");
+  const passwordHash = await bcrypt.hash(password, 10);
+  const user = await prisma.user.create({
+    data: { name, email, passwordHash },
+  });
+  const token = generateJWT(user.id);
+  return { user, token };
 };
 
-export const getUserByClerkId = async (clerkId: string) => {
-  await ensureUserExists(clerkId);
+export const authenticateUser = async ({
+  email,
+  password,
+}: {
+  email: string;
+  password: string;
+}) => {
+  const user = await prisma.user.findUnique({ where: { email } });
+  if (!user) throw new Error("Invalid credentials");
+  const valid = await bcrypt.compare(password, user.passwordHash);
+  if (!valid) throw new Error("Invalid credentials");
+  const token = generateJWT(user.id);
+  return { user, token };
+};
+
+export const getUserById = async (id: number) => {
   return prisma.user.findUnique({
-    where: { clerkId },
+    where: { id },
     include: { appliedJobs: true, savedJobs: true },
   });
+};
+
+export const generateJWT = (userId: number) => {
+  return jwt.sign({ id: userId }, JWT_SECRET, { expiresIn: "7d" });
+};
+
+export const verifyJWT = (token: string) => {
+  return jwt.verify(token, JWT_SECRET) as { id: number };
 };

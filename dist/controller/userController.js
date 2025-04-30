@@ -42,12 +42,50 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUserProfile = void 0;
+exports.getUserProfile = exports.logout = exports.signIn = exports.signUp = void 0;
 const userService = __importStar(require("../services/userService"));
-const getUserProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const signUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const clerkId = req.auth.userId;
-        const user = yield userService.getUserByClerkId(clerkId);
+        const { name, email, password } = req.body;
+        const { user, token } = yield userService.createUser({
+            name,
+            email,
+            password,
+        });
+        return res.status(201).json({ token });
+    }
+    catch (error) {
+        return res.status(400).json({ message: error.message });
+    }
+});
+exports.signUp = signUp;
+const signIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { email, password } = req.body;
+        const { user, token } = yield userService.authenticateUser({
+            email,
+            password,
+        });
+        return res.status(200).json({ token });
+    }
+    catch (error) {
+        return res.status(401).json({ message: error.message });
+    }
+});
+exports.signIn = signIn;
+const logout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // For JWT, logout is handled on the client by deleting the token
+    return res.status(200).json({ message: "Logged out" });
+});
+exports.logout = logout;
+const getUserProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    try {
+        // req.user is set by JWT middleware
+        const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
+        if (!userId)
+            return res.status(401).json({ message: "Unauthorized" });
+        const user = yield userService.getUserById(userId);
         if (!user)
             return res.status(404).json({ message: "User not found" });
         return res.status(200).json(user);

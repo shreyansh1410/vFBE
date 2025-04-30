@@ -35,8 +35,8 @@ export const getJobById = async (req: Request, res: Response): Promise<any> => {
 
 export const saveJob = async (req: Request, res: Response): Promise<any> => {
   try {
-    const clerkId = req.auth.userId;
-    const success = await jobService.saveJob(clerkId, parseInt(req.params.id));
+    const userId = (req as any).user?.id;
+    const success = await jobService.saveJob(userId, parseInt(req.params.id));
     if (!success) return res.status(404).json({ message: "Job not found" });
     return res.status(200).json({ message: "Job saved" });
   } catch (error: any) {
@@ -46,9 +46,9 @@ export const saveJob = async (req: Request, res: Response): Promise<any> => {
 
 export const applyToJob = async (req: Request, res: Response): Promise<any> => {
   try {
-    const clerkId = req.auth.userId;
+    const userId = (req as any).user?.id;
     const success = await jobService.applyToJob(
-      clerkId,
+      userId,
       parseInt(req.params.id)
     );
     if (!success) return res.status(404).json({ message: "Job not found" });
