@@ -13,6 +13,7 @@ app.use(
       "http://localhost:5173",
       "https://v-ffe.vercel.app",
       "https://vfbe.onrender.com",
+      "visafriendly.shreyanshshukla.me",
     ],
   })
 );
