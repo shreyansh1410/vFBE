@@ -45,7 +45,8 @@ export const getAllJobs = async (filters: JobFilters) => {
   if (salaryMax) where.salary = { lte: salaryMax };
   if (job_type) where.job_type = job_type;
   if (experience_level) where.experience_level = experience_level;
-  if (work_setting) where.work_setting = work_setting;
+  if (work_setting)
+    where.work_setting = { contains: work_setting, mode: "insensitive" };
   if (h1Type) where.h1Type = h1Type;
   if (job_category) where.job_category = job_category;
 
