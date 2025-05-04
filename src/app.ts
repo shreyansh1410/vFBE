@@ -6,7 +6,16 @@ import errorHandler from "./middleware/errorHandler";
 
 const app = express();
 
-app.use(cors({ origin: ["http://localhost:3000", "http://localhost:5173"] }));
+app.use(
+  cors({
+    origin: [
+      "http://localhost:3000",
+      "http://localhost:5173",
+      "https://v-ffe.vercel.app/",
+      "https://vfbe.onrender.com",
+    ],
+  })
+);
 app.use(express.json());
 app.use("/api/jobs", jobRoutes);
 app.use("/api/auth", userRoutes);
