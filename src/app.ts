@@ -11,7 +11,7 @@ app.use(
     origin: [
       "http://localhost:3000",
       "http://localhost:5173",
-      "https://v-ffe.vercel.app/",
+      "https://v-ffe.vercel.app",
       "https://vfbe.onrender.com",
     ],
   })
