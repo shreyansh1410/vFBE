@@ -4,6 +4,7 @@ import {
   signUp,
   signIn,
   logout,
+  googleAuth,
 } from "../controller/userController";
 import { requireAuth } from "../middleware/requireAuth";
 
@@ -13,5 +14,6 @@ router.post("/signup", signUp);
 router.post("/signin", signIn);
 router.post("/logout", requireAuth, logout);
 router.get("/me", requireAuth, getUserProfile);
+router.post("/google", googleAuth);
 
 export default router;

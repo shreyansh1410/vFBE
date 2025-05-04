@@ -33,6 +33,11 @@ export const authenticateUser = async ({
 }) => {
   const user = await prisma.user.findUnique({ where: { email } });
   if (!user) throw new Error("Invalid credentials");
+  if (!user.passwordHash) {
+    throw new Error(
+      "This account uses Google sign-in. Please sign in with Google."
+    );
+  }
   const valid = await bcrypt.compare(password, user.passwordHash);
   if (!valid) throw new Error("Invalid credentials");
   const token = generateJWT(user.id);
@@ -52,4 +57,21 @@ export const generateJWT = (userId: number) => {
 
 export const verifyJWT = (token: string) => {
   return jwt.verify(token, JWT_SECRET) as { id: number };
+};
+
+export const findOrCreateGoogleUser = async ({
+  email,
+  name,
+}: {
+  email: string;
+  name: string;
+}) => {
+  let user = await prisma.user.findUnique({ where: { email } });
+  if (!user) {
+    user = await prisma.user.create({
+      data: { name, email },
+    });
+  }
+  const token = generateJWT(user.id);
+  return { user, token };
 };
