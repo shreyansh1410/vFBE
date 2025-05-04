@@ -14,6 +14,7 @@ app.use(
       "https://v-ffe.vercel.app",
       "https://vfbe.onrender.com",
       "visafriendly.shreyanshshukla.me",
+      "https://shreyanshshukla.me",
     ],
   })
 );
