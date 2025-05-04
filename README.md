@@ -217,6 +217,4 @@ VisaFriendly supports sign up and sign in with Google using OAuth 2.0.
 
 ## License
 
-MIT (or your preferred license)
-
-Let me know if you want this saved as a README.md file or want to tweak any section!
+MIT
