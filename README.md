@@ -8,7 +8,7 @@ VisaFriendly is a full-stack web application that helps users find and apply to 
 
 ### 🖥️ Frontend
 
-- **Authentication:** Sign up, sign in, and protected routes using JWT.
+- **Authentication:** Sign up, sign in (including Google OAuth), and protected routes using JWT.
 - **Job Listings:** Browse, filter, and paginate job listings by title, company, location, salary, job type, experience, work setting, visa type, and category.
 - **Job Details:** View detailed job information, and (if signed in) save or apply to jobs.
 - **Profile:** View your user profile (protected route).
@@ -137,6 +137,60 @@ yarn install
 - `GET /api/jobs/:id` — Job details
 - `POST /api/jobs/:id/save` — Save job (JWT required)
 - `POST /api/jobs/:id/apply` — Apply to job (JWT required)
+
+---
+
+## Google OAuth Integration
+
+VisaFriendly supports sign up and sign in with Google using OAuth 2.0.
+
+### Google OAuth Setup
+
+1. **Create Google Cloud OAuth Credentials:**
+
+   - Go to the [Google Cloud Console](https://console.cloud.google.com/apis/credentials).
+   - Create a new OAuth 2.0 Client ID (type: Web application).
+   - Add the following to **Authorized JavaScript origins**:
+     - `http://localhost:5173`
+     - `http://localhost:3000`
+     - Your deployed frontend URLs (e.g., `https://v-ffe.vercel.app`)
+   - Add the same URLs to **Authorized redirect URIs**.
+   - Copy your **Client ID**.
+
+2. **Frontend Environment:**
+
+   - In `visaFriendlyFE/.env`, add:
+     ```
+     VITE_GOOGLE_CLIENT_ID=your-google-client-id-here
+     ```
+   - The frontend uses [`@react-oauth/google`](https://www.npmjs.com/package/@react-oauth/google`) for the Google sign-in button.
+
+3. **Backend Environment:**
+
+   - In `visaFriendlyBE/.env`, add:
+     ```
+     GOOGLE_CLIENT_ID=your-google-client-id-here
+     ```
+   - The backend uses [`google-auth-library`](https://www.npmjs.com/package/google-auth-library) to verify Google ID tokens.
+
+4. **Install Dependencies:**
+   - Frontend:
+     ```bash
+     npm install @react-oauth/google
+     ```
+   - Backend:
+     ```bash
+     npm install google-auth-library
+     ```
+
+---
+
+## Usage: Google Sign In/Sign Up
+
+- On the Sign In and Sign Up pages, you will see a "Sign in with Google" button.
+- Clicking the button will open a Google login popup. On success, your Google account's name and email are used to create or log in to your account.
+- If you sign up with Google, you can only log in with Google (no password).
+- If you sign up with email/password, you can only log in with email/password.
 
 ---
 
