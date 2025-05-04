@@ -40,7 +40,6 @@ export const getUserProfile = async (
   res: Response
 ): Promise<any> => {
   try {
-    // req.user is set by JWT middleware
     const userId = (req as any).user?.id;
     if (!userId) return res.status(401).json({ message: "Unauthorized" });
     const user = await userService.getUserById(userId);

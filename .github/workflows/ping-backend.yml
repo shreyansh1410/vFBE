@@ -11,4 +11,4 @@ jobs:
     steps:
       - name: Curl backend root endpoint
         run: |
-          curl --fail --silent --show-error "${{ secrets.BACKEND_URL }}" || exit 1
+          curl --fail --silent --show-error "${{ secrets.BACKEND_URL }}/" || exit 1

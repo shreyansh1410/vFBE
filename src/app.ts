@@ -23,6 +23,10 @@ app.use("/api/jobs", jobRoutes);
 app.use("/api/auth", userRoutes);
 app.use(errorHandler);
 
+app.get("/", (req, res) => {
+  res.json({ message: "hello" });
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
